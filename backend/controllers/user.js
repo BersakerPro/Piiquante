@@ -5,13 +5,16 @@ const User = require('../models/user');
 
 exports.signup = (req, res, next) => {
 
+    //Fonction de hachage du mot de passe
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
+            //Création d'un objet user
             const user = new User({
                 email: req.body.email,
                 password: hash
             });
             console.log(res.status());
+            //Enregistrement dans la base de donnée
             user.save()
                 .then(() => res.status(201).json({ message: 'Compte utilisateur créé !' }))
                 .catch(error => res.status(400).json({ error }));
