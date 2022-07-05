@@ -28,19 +28,19 @@ exports.deleteSauce = (req, res, next) => {
         ...JSON.parse(req.body.sauce),
         imageUrl: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
     }
-    : { ...req.body };
+        : { ...req.body };
     console.log(req.body);
 
-    Sauce.findOne({_id: req.params.id })
-      .then(sauce => {
-        const filename = sauce.imageUrl.split('/images/')[1];
-        fs.unlink(`images/${filename}`, () => {
-            Sauce.deleteOne({ _id: req.params.id })
-                .then(() => res.status(200).json({ message: 'Objet supprimé' }))
-                .catch(error => res.status(400).json({ error }));
+    Sauce.findOne({ _id: req.params.id })
+        .then(sauce => {
+            const filename = sauce.imageUrl.split('/images/')[1];
+            fs.unlink(`images/${filename}`, () => {
+                Sauce.deleteOne({ _id: req.params.id })
+                    .then(() => res.status(200).json({ message: 'Objet supprimé' }))
+                    .catch(error => res.status(400).json({ error }));
+            })
         })
-      })
-      .catch(error => res.status(500).json({ error }))
+        .catch(error => res.status(500).json({ error }))
 };
 
 //Modification d'une sauce
@@ -138,7 +138,7 @@ exports.likeAndDislike = (req, res, next) => {
                         .catch(error => res.status(400).json({ error }));
                 }
             }
-            
+
             //Si l'user like la sauce
             if (req.body.like == 1) {
                 Sauce.updateOne({ _id: req.params.id }, {
@@ -154,16 +154,16 @@ exports.likeAndDislike = (req, res, next) => {
 }
 
 
-    //Récupération des sauces
-    exports.getSauces = (req, res, next) => {
-        Sauce.find()
-            .then(sauces => res.status(200).json(sauces))
-            .catch(error => res.status(400).json({ error }));
-    };
+//Récupération des sauces
+exports.getSauces = (req, res, next) => {
+    Sauce.find()
+        .then(sauces => res.status(200).json(sauces))
+        .catch(error => res.status(400).json({ error }));
+};
 
-    //Récupération d'une sauce
-    exports.getOneSauce = (req, res, next) => {
-        Sauce.findOne({ _id: req.params.id })
-            .then(sauce => res.status(200).json(sauce))
-            .catch(error => res.status(400).json({ error }));
-    };
+//Récupération d'une sauce
+exports.getOneSauce = (req, res, next) => {
+    Sauce.findOne({ _id: req.params.id })
+        .then(sauce => res.status(200).json(sauce))
+        .catch(error => res.status(400).json({ error }));
+};
