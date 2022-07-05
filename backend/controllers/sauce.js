@@ -24,42 +24,23 @@ exports.createSauce = (req, res, next) => {
 
 //Suppression d'une sauce
 exports.deleteSauce = (req, res, next) => {
-    console.log("42//", req.body);
-    console.log("43//", req.params);
-    //On regarde si il y a un champ file dans l'objet requête
     const sauceObject = req.file ? {
-        //Si c'est le cas, on parse la chaine de caractère
         ...JSON.parse(req.body.sauce),
-        //Et on recrée l'url de l'image
         imageUrl: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
     }
-        //Sinon, on récupère l'objet dans le corps de la requête
-        : { ...req.body };
-    console.log("54//", sauceObject);
+    : { ...req.body };
+    console.log(req.body);
 
-    //On recherche l'objet concerné
-    Sauce.findOne({ _id: req.params.id })
-
-        .then((sauce) => {
-            console.log("63//", sauce);
-            //On vérifie que l'userId de la requête est bien le propriétaire
-            if (sauce.userId == req.body.userId) {
-                console.log("66//", sauce.userId);
-                console.log("67//", req.body.userId);
-
-                const filename = thing.imageUrl.split('/images/')[1];
-                fs.unlink(`images/${filename}`, () => {
-                    Sauce.deleteOne({ _id: req.params.id })
-                        .then(() => res.status(200).json({ message: "Sauce modifiée !" }))
-                        .catch((error) => res.status(401).json({ error }));
-                })
-            } else {
-                alert("Vous ne pouvez pas supprimer cette sauce")
-            }
+    Sauce.findOne({_id: req.params.id })
+      .then(sauce => {
+        const filename = sauce.imageUrl.split('/images/')[1];
+        fs.unlink(`images/${filename}`, () => {
+            Sauce.deleteOne({ _id: req.params.id })
+                .then(() => res.status(200).json({ message: 'Objet supprimé' }))
+                .catch(error => res.status(400).json({ error }));
         })
-        .catch((error) => {
-            res.status(400).json({ error });
-        });
+      })
+      .catch(error => res.status(500).json({ error }))
 };
 
 //Modification d'une sauce
