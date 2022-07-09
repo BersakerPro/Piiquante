@@ -73,11 +73,7 @@ exports.modifySauce = (req, res, next) => {
                 const target = { _id: req.params.id };
                 const newValues = {
                     $set: {
-                        name: req.body.name,
-                        manufacturer: req.body.manufacturer,
-                        description: req.body.description,
-                        mainPepper: req.body.mainPepper,
-                        heat: req.body.heat,
+                        ...sauceObject
                     },
                 };
                 Sauce.updateOne(target, newValues)

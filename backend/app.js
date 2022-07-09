@@ -19,12 +19,12 @@ const app = express();
 app.use(helmet());
 app.use(mongoSanitize())
 
-const hostname = process.env.HOSTNAME;
+const loginDB = process.env.LOGINDB;
 const password = process.env.PASSWORD;
 const address = process.env.ADDRESS;
+console.log(loginDB);
 
-
-mongoose.connect(`mongodb+srv://${hostname}:${password}@${address}`,
+mongoose.connect(`mongodb+srv://${loginDB}:${password}@${address}`,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
