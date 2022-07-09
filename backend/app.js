@@ -8,7 +8,7 @@ const path = require('path');
 const userRoutes = require('./routes/user');
 const sauceRoutes = require('./routes/sauce');
 
-const helmet = require('helmet');
+//const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize')
 
 
@@ -16,7 +16,12 @@ require('dotenv').config();
 
 const app = express();
 
-app.use(helmet());
+/*app.use(
+  helmet({
+    crossOriginEmbedderPolicy: false,
+    // ...
+  })
+);*/
 app.use(mongoSanitize())
 
 const loginDB = process.env.LOGINDB;
